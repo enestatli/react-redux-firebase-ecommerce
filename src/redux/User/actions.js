@@ -6,6 +6,10 @@ export const setCurrentUser = (user) => ({
   payload: user,
 });
 
+export const resetAllAuthForms = () => ({
+  type: userTypes.RESET_AUTH_FORMS,
+});
+
 export const signInUser = ({ email, password }) => async (dispatch) => {
   try {
     await auth.signInWithEmailAndPassword(email, password);

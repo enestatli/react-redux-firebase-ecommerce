@@ -7,7 +7,7 @@ import './styles.scss';
 import AuthWrapper from '../AuthWrapper';
 import FormInput from '../Forms/FormInput';
 import Button from '../Forms/Button';
-import { resetPassword } from '../../redux/User/actions';
+import { resetAllAuthForms, resetPassword } from '../../redux/User/actions';
 
 const mapState = ({ user }) => ({
   resetPasswordSuccess: user.resetPasswordSuccess,
@@ -22,6 +22,7 @@ const EmailPassword = (props) => {
 
   useEffect(() => {
     if (resetPasswordSuccess) {
+      dispatch(resetAllAuthForms());
       props.history.push('/login');
     }
   }, [resetPasswordSuccess]);
