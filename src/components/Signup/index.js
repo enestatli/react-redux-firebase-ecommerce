@@ -4,6 +4,7 @@ import Button from '../Forms/Button';
 import './styles.scss';
 
 import { handleUserProfile, auth } from '../../firebase/utils';
+import AuthWrapper from '../AuthWrapper';
 
 const Signup = (props) => {
   const [displayName, setDisplayName] = useState('');
@@ -31,10 +32,13 @@ const Signup = (props) => {
     } catch (error) {}
   };
 
+  const configAuthWrapper = {
+    headline: 'Signup',
+  };
+
   return (
-    <div className="signup">
-      <div className="wrap">
-        <h2>Signup</h2>
+    <AuthWrapper {...configAuthWrapper}>
+      <div className="formWrap">
         {errors?.length > 0 && (
           <ul>
             {errors.map((err, index) => {
@@ -42,45 +46,43 @@ const Signup = (props) => {
             })}
           </ul>
         )}
-        <div className="formWrap">
-          <form onSubmit={formSubmit}>
-            <FormInput
-              type="text"
-              name="displayName"
-              value={displayName}
-              placeholder="Full Name"
-              onChange={(e) => setDisplayName(e.target.value)}
-            />
+        <form onSubmit={formSubmit}>
+          <FormInput
+            type="text"
+            name="displayName"
+            value={displayName}
+            placeholder="Full Name"
+            onChange={(e) => setDisplayName(e.target.value)}
+          />
 
-            <FormInput
-              type="email"
-              name="email"
-              value={email}
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
+          <FormInput
+            type="email"
+            name="email"
+            value={email}
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-            <FormInput
-              type="text"
-              name="password"
-              value={password}
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <FormInput
+            type="text"
+            name="password"
+            value={password}
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-            <FormInput
-              type="text"
-              name="confirmPassword"
-              value={confirmPassword}
-              placeholder="Confirm Password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+          <FormInput
+            type="text"
+            name="confirmPassword"
+            value={confirmPassword}
+            placeholder="Confirm Password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
 
-            <Button type="submit">Register</Button>
-          </form>
-        </div>
+          <Button type="submit">Register</Button>
+        </form>
       </div>
-    </div>
+    </AuthWrapper>
   );
 };
 

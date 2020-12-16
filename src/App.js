@@ -1,16 +1,18 @@
+import { useEffect, useState } from 'react';
+
 import './default.scss';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { auth, handleUserProfile } from './firebase/utils';
 
 // layouts
 import MainLayout from './layouts/MainLayout';
+import HomeLayout from './layouts/HomeLayout';
 
 // pages
 import Homepage from './pages/Homepage';
 import Registration from './pages/Registration';
-import HomeLayout from './layouts/HomeLayout';
 import Login from './pages/Login';
-import { useEffect, useState } from 'react';
+import Recovery from './pages/Recovery';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -68,6 +70,14 @@ function App() {
               </MainLayout>
             )
           }
+        />
+        <Route
+          path="/recovery"
+          render={() => (
+            <MainLayout>
+              <Recovery />
+            </MainLayout>
+          )}
         />
       </Switch>
     </div>
