@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom';
 
 const EmailPassword = (props) => {
   const [email, setEmail] = useState('');
+  const [errors, setErrors] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +26,8 @@ const EmailPassword = (props) => {
           props.history.push('/login');
         })
         .catch(() => {
-          console.log('Something wrong');
+          const err = ['Email not found. Please try again.'];
+          setErrors(err);
         });
     } catch (error) {
       console.log(error);
@@ -39,6 +41,13 @@ const EmailPassword = (props) => {
   return (
     <AuthWrapper {...configAuthWrapper}>
       <div className="formWrap">
+        {errors.length > 0 && (
+          <ul>
+            {errors.map((error, index) => {
+              return <li key={index}>{error}</li>;
+            })}
+          </ul>
+        )}
         <form onSubmit={handleSubmit}>
           <FormInput
             type="email"

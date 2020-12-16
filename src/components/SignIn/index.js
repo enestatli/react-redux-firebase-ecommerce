@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { auth, signInWithGoogle } from '../../firebase/utils';
 import AuthWrapper from '../AuthWrapper';
 import Button from '../Forms/Button';
@@ -49,6 +50,10 @@ const SignIn = (props) => {
             <div className="row">
               <Button onClick={signInWithGoogle}>Sign in with Google</Button>
             </div>
+          </div>
+
+          <div className="links">
+            <Link to="/recovery">Reset Password</Link>
           </div>
         </form>
       </div>
