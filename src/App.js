@@ -4,6 +4,10 @@ import './default.scss';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { auth, handleUserProfile } from './firebase/utils';
 
+// redux
+import { setCurrentUser } from './redux/User/actions';
+import { connect } from 'react-redux';
+
 // layouts
 import MainLayout from './layouts/MainLayout';
 import HomeLayout from './layouts/HomeLayout';
@@ -14,8 +18,8 @@ import Registration from './pages/Registration';
 import Login from './pages/Login';
 import Recovery from './pages/Recovery';
 
-function App() {
-  const [currentUser, setCurrentUser] = useState(null);
+const App = (props) => {
+  const { currentUser, setCurrentUser } = props;
 
   useEffect(() => {
     const authListener = auth.onAuthStateChanged(async (userAuth) => {
@@ -28,7 +32,7 @@ function App() {
           });
         });
       }
-      setCurrentUser(null);
+      setCurrentUser(userAuth);
     });
     return () => {
       authListener();
@@ -42,7 +46,7 @@ function App() {
           path="/"
           exact
           render={() => (
-            <HomeLayout currentUser={currentUser}>
+            <HomeLayout>
               <Homepage />
             </HomeLayout>
           )}
@@ -53,7 +57,7 @@ function App() {
             currentUser ? (
               <Redirect to="/" />
             ) : (
-              <MainLayout currentUser={currentUser}>
+              <MainLayout>
                 <Registration />
               </MainLayout>
             )
@@ -82,6 +86,14 @@ function App() {
       </Switch>
     </div>
   );
-}
+};
 
-export default App;
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

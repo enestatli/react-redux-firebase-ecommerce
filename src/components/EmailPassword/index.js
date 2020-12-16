@@ -54,7 +54,7 @@ const EmailPassword = (props) => {
             name="email"
             value={email}
             placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
+            handleChange={(e) => setEmail(e.target.value)}
           />
 
           <Button type="submit">Send Email</Button>

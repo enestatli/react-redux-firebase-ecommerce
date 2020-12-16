@@ -13,6 +13,14 @@ const Signup = (props) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState([]);
 
+  const resetForm = () => {
+    setDisplayName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setErrors([]);
+  };
+
   const formSubmit = async (e) => {
     e.preventDefault();
 
@@ -29,6 +37,7 @@ const Signup = (props) => {
       );
 
       await handleUserProfile(user, { displayName });
+      resetForm();
     } catch (error) {}
   };
 
@@ -52,7 +61,7 @@ const Signup = (props) => {
             name="displayName"
             value={displayName}
             placeholder="Full Name"
-            onChange={(e) => setDisplayName(e.target.value)}
+            handleChange={(e) => setDisplayName(e.target.value)}
           />
 
           <FormInput
@@ -60,7 +69,7 @@ const Signup = (props) => {
             name="email"
             value={email}
             placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
+            handleChange={(e) => setEmail(e.target.value)}
           />
 
           <FormInput
@@ -68,7 +77,7 @@ const Signup = (props) => {
             name="password"
             value={password}
             placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
+            handleChange={(e) => setPassword(e.target.value)}
           />
 
           <FormInput
@@ -76,7 +85,7 @@ const Signup = (props) => {
             name="confirmPassword"
             value={confirmPassword}
             placeholder="Confirm Password"
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            handleChange={(e) => setConfirmPassword(e.target.value)}
           />
 
           <Button type="submit">Register</Button>

@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import './styles.scss';
 import { auth } from '../../firebase/utils';
+import { connect } from 'react-redux';
 
 const Header = (props) => {
   const { currentUser } = props;
 
-  console.log(currentUser);
   return (
     <header className="header">
       <div className="wrap">
@@ -47,4 +47,8 @@ Header.defaultProps = {
   currentUser: null,
 };
 
-export default Header;
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+
+export default connect(mapStateToProps, null)(Header);

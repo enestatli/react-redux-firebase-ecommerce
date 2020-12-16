@@ -10,11 +10,17 @@ const SignIn = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const resetForm = () => {
+    setEmail('');
+    setPassword('');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       await auth.signInWithEmailAndPassword(email, password);
+      resetForm();
     } catch (error) {
       console.log(error);
     }
@@ -33,7 +39,7 @@ const SignIn = (props) => {
             name="email"
             value={email}
             placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
+            handleChange={(e) => setEmail(e.target.value)}
           />
 
           <FormInput
@@ -41,7 +47,7 @@ const SignIn = (props) => {
             name="password"
             value={password}
             placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
+            handleChange={(e) => setPassword(e.target.value)}
           />
 
           <Button type="submit">Log In</Button>
