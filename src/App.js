@@ -4,6 +4,9 @@ import './default.scss';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { auth, handleUserProfile } from './firebase/utils';
 
+// hoc
+import WithAuth from './hoc/withAuth';
+
 // redux
 import { setCurrentUser } from './redux/User/actions';
 import { connect } from 'react-redux';
@@ -17,6 +20,7 @@ import Homepage from './pages/Homepage';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
 import Recovery from './pages/Recovery';
+import Dashboard from './pages/Dashboard';
 
 const App = (props) => {
   const { currentUser, setCurrentUser } = props;
@@ -53,27 +57,19 @@ const App = (props) => {
         />
         <Route
           path="/registration"
-          render={() =>
-            currentUser ? (
-              <Redirect to="/" />
-            ) : (
-              <MainLayout>
-                <Registration />
-              </MainLayout>
-            )
-          }
+          render={() => (
+            <MainLayout>
+              <Registration />
+            </MainLayout>
+          )}
         />
         <Route
           path="/login"
-          render={() =>
-            currentUser ? (
-              <Redirect to="/" />
-            ) : (
-              <MainLayout>
-                <Login />
-              </MainLayout>
-            )
-          }
+          render={() => (
+            <MainLayout>
+              <Login />
+            </MainLayout>
+          )}
         />
         <Route
           path="/recovery"
@@ -81,6 +77,16 @@ const App = (props) => {
             <MainLayout>
               <Recovery />
             </MainLayout>
+          )}
+        />
+        <Route
+          path="/dashboard"
+          render={() => (
+            <WithAuth>
+              <MainLayout>
+                <Dashboard />
+              </MainLayout>
+            </WithAuth>
           )}
         />
       </Switch>

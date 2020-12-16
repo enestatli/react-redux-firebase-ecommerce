@@ -5,6 +5,7 @@ import './styles.scss';
 
 import { handleUserProfile, auth } from '../../firebase/utils';
 import AuthWrapper from '../AuthWrapper';
+import { withRouter } from 'react-router-dom';
 
 const Signup = (props) => {
   const [displayName, setDisplayName] = useState('');
@@ -38,6 +39,7 @@ const Signup = (props) => {
 
       await handleUserProfile(user, { displayName });
       resetForm();
+      props.history.push('/');
     } catch (error) {}
   };
 
@@ -95,4 +97,4 @@ const Signup = (props) => {
   );
 };
 
-export default Signup;
+export default withRouter(Signup);
