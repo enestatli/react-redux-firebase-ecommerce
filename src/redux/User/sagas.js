@@ -1,12 +1,15 @@
 import { takeLatest, call, all, put } from 'redux-saga/effects';
 import { auth, getCurrentUser, handleUserProfile } from '../../firebase/utils';
-import { signInSuccess, signOutUserSuccess } from './actions';
+import { signInSuccess, signOutUserSuccess, userError } from './actions';
 import userTypes from './types';
 
 // helpers
-export function* getSnapShotFromUserAuth(user) {
+export function* getSnapShotFromUserAuth(user, additionalData = {}) {
   try {
-    const userRef = yield call(handleUserProfile, { userAuth: user });
+    const userRef = yield call(handleUserProfile, {
+      userAuth: user,
+      additionalData,
+    });
     const snapshot = yield userRef.get();
     yield put(
       signInSuccess({
@@ -61,10 +64,36 @@ export function* onSignOutUserStart() {
   yield takeLatest(userTypes.SIGN_OUT_USER_START, signOutUser);
 }
 
+// sign up
+export function* signUpUser({
+  payload: { displayName, email, password, confirmPassword },
+}) {
+  if (password !== confirmPassword) {
+    const err = ["Password don't match"];
+    yield put(userError(err));
+    return;
+  }
+
+  try {
+    const { user } = yield auth.createUserWithEmailAndPassword(email, password);
+    const additionalData = { displayName };
+    yield getSnapShotFromUserAuth(user, additionalData);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function* onSignUpUserStart() {
+  yield takeLatest(userTypes.SIGN_UP_USER_START, signUpUser);
+}
+
+// user sagas
+
 export default function* userSagas() {
   yield all([
     call(onEmailSignInStart),
     call(onCheckUserSession),
     call(onSignOutUserStart),
+    call(onSignUpUserStart),
   ]);
 }
