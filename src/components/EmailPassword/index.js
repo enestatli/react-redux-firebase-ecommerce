@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './styles.scss';
@@ -16,6 +16,7 @@ const mapState = ({ user }) => ({
 
 const EmailPassword = (props) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { resetPasswordSuccess, userErrors } = useSelector(mapState);
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState([]);
@@ -23,7 +24,7 @@ const EmailPassword = (props) => {
   useEffect(() => {
     if (resetPasswordSuccess) {
       dispatch(resetUserState());
-      props.history.push('/login');
+      history.push('/login');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetPasswordSuccess]);
@@ -69,4 +70,4 @@ const EmailPassword = (props) => {
   );
 };
 
-export default withRouter(EmailPassword);
+export default EmailPassword;

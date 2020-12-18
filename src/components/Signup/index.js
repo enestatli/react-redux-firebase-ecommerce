@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import FormInput from '../Forms/FormInput';
 import Button from '../Forms/Button';
@@ -16,6 +16,7 @@ const mapState = ({ user }) => ({
 
 const Signup = (props) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { currentUser, userErrors } = useSelector(mapState);
 
   const [displayName, setDisplayName] = useState('');
@@ -27,7 +28,7 @@ const Signup = (props) => {
   useEffect(() => {
     if (currentUser) {
       resetForm();
-      props.history.push('/');
+      history.push('/');
     }
   }, [currentUser]);
 
@@ -106,4 +107,4 @@ const Signup = (props) => {
   );
 };
 
-export default withRouter(Signup);
+export default Signup;

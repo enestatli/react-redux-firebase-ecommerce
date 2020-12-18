@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
-import {
-  resetAllAuthForms,
-  emailSignInStart,
-  signInWithGoogle,
-} from '../../redux/User/actions';
+import { emailSignInStart, googleSignInStart } from '../../redux/User/actions';
 
 import AuthWrapper from '../AuthWrapper';
 import Button from '../Forms/Button';
@@ -18,16 +14,18 @@ const mapState = ({ user }) => ({
 });
 
 const SignIn = (props) => {
-  const { currentUser } = useSelector(mapState);
   const dispatch = useDispatch();
+  const { currentUser } = useSelector(mapState);
+  const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (currentUser) {
       resetForm();
-      props.history.push('/');
+      history.push('/');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   const resetForm = () => {
@@ -41,7 +39,7 @@ const SignIn = (props) => {
   };
 
   const handleGoogleSignIn = () => {
-    dispatch(signInWithGoogle());
+    dispatch(googleSignInStart());
   };
 
   const configAuthWrapper = {
@@ -85,4 +83,4 @@ const SignIn = (props) => {
   );
 };
 
-export default withRouter(SignIn);
+export default SignIn;
