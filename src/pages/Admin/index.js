@@ -6,15 +6,27 @@ import FormInput from './../../components/Forms/FormInput';
 import FormSelect from './../../components/Forms/FormSelect';
 import Button from './../../components/Forms/Button';
 import './styles.scss';
+import {
+  addProductStart,
+  fetchProductsStart,
+} from '../../redux/Products/actions';
+
+const mapState = ({ productsData }) => ({
+  products: productsData.products,
+});
 
 const Admin = (props) => {
-  // const { products } = useSelector(mapState);
+  const { products } = useSelector(mapState);
   const dispatch = useDispatch();
   const [hideModal, setHideModal] = useState(true);
   const [productCategory, setProductCategory] = useState('mens');
   const [productName, setProductName] = useState('');
   const [productThumbnail, setProductThumbnail] = useState('');
   const [productPrice, setProductPrice] = useState(0);
+
+  useEffect(() => {
+    dispatch(fetchProductsStart());
+  }, []);
 
   const toggleModal = () => setHideModal(!hideModal);
 
@@ -33,8 +45,15 @@ const Admin = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    resetForm();
+    dispatch(
+      addProductStart({
+        productCategory,
+        productName,
+        productThumbnail,
+        productPrice,
+      })
+    );
+    // resetForm();
   };
 
   return (
@@ -113,7 +132,7 @@ const Admin = (props) => {
                   cellSpacing="0"
                 >
                   <tbody>
-                    {/* {products.map((product, index) => {
+                    {products.map((product, index) => {
                       const {
                         productName,
                         productThumbnail,
@@ -124,7 +143,11 @@ const Admin = (props) => {
                       return (
                         <tr key={index}>
                           <td>
-                            <img className="thumb" src={productThumbnail} />
+                            <img
+                              className="thumb"
+                              src={productThumbnail}
+                              alt="product"
+                            />
                           </td>
                           <td>{productName}</td>
                           <td>£{productPrice}</td>
@@ -135,7 +158,7 @@ const Admin = (props) => {
                           </td>
                         </tr>
                       );
-                    })} */}
+                    })}
                   </tbody>
                 </table>
               </td>
