@@ -2,8 +2,13 @@ import { useEffect } from 'react';
 
 import './default.scss';
 import { Route, Switch } from 'react-router-dom';
+
+// componenets
+import AdminToolbar from './components/AdminToolbar';
+
 // hoc
 import WithAuth from './hoc/withAuth';
+import WithAdminAuth from './hoc/withAdminAuth';
 
 // redux
 import { checkUserSession } from './redux/User/actions';
@@ -19,6 +24,7 @@ import Registration from './pages/Registration';
 import Login from './pages/Login';
 import Recovery from './pages/Recovery';
 import Dashboard from './pages/Dashboard';
+import Admin from './pages/Admin';
 
 const App = (props) => {
   const dispatch = useDispatch();
@@ -29,6 +35,7 @@ const App = (props) => {
 
   return (
     <div className="App">
+      <AdminToolbar />
       <Switch>
         <Route
           path="/"
@@ -73,6 +80,16 @@ const App = (props) => {
             </WithAuth>
           )}
         />
+        <WithAdminAuth>
+          <Route
+            path="/admin"
+            render={() => (
+              <MainLayout>
+                <Admin />
+              </MainLayout>
+            )}
+          />
+        </WithAdminAuth>
       </Switch>
     </div>
   );
