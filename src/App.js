@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 // layouts
 import MainLayout from './layouts/MainLayout';
 import HomeLayout from './layouts/HomeLayout';
+import AdminLayout from './layouts/AdminLayout';
 
 // pages
 import Homepage from './pages/Homepage';
@@ -84,9 +85,9 @@ const App = (props) => {
           <Route
             path="/admin"
             render={() => (
-              <MainLayout>
+              <AdminLayout>
                 <Admin />
-              </MainLayout>
+              </AdminLayout>
             )}
           />
         </WithAdminAuth>
