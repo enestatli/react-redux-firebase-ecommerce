@@ -1,8 +1,12 @@
 import { takeLatest, call, all, put, take } from 'redux-saga/effects';
 import { auth } from '../../firebase/utils';
-import { setProducts } from './actions';
+import { fetchProductsStart, setProducts } from './actions';
 
-import { handleAddProduct, handleFetchProducts } from './helpers';
+import {
+  handleAddProduct,
+  handleDeleteProduct,
+  handleFetchProducts,
+} from './helpers';
 import productsTypes from './types';
 
 export function* addProduct({
@@ -18,6 +22,7 @@ export function* addProduct({
       productAdminUserUID: auth.currentUser.uid,
       createdAt: timestamp,
     });
+    yield put(fetchProductsStart());
   } catch (error) {
     // console.log(error)
   }
@@ -40,8 +45,25 @@ export function* onFetchProductsStart() {
   yield takeLatest(productsTypes.FETCH_PRODUCTS_START, fetchProducts);
 }
 
+export function* deleteProduct({ payload }) {
+  try {
+    yield handleDeleteProduct(payload);
+    yield put(fetchProductsStart());
+  } catch (error) {
+    // console.log(error)
+  }
+}
+
+export function* onDeleteProductStart() {
+  yield takeLatest(productsTypes.DELETE_PRODUCT_START, deleteProduct);
+}
+
 export default function* productSagas() {
-  yield all([call(onAddProductStart), call(onFetchProductsStart)]);
+  yield all([
+    call(onAddProductStart),
+    call(onFetchProductsStart),
+    call(onDeleteProductStart),
+  ]);
 }
 
 // listen action

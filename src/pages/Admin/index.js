@@ -8,6 +8,7 @@ import Button from './../../components/Forms/Button';
 import './styles.scss';
 import {
   addProductStart,
+  deleteProductStart,
   fetchProductsStart,
 } from '../../redux/Products/actions';
 
@@ -53,7 +54,7 @@ const Admin = (props) => {
         productPrice,
       })
     );
-    // resetForm();
+    resetForm();
   };
 
   return (
@@ -152,7 +153,11 @@ const Admin = (props) => {
                           <td>{productName}</td>
                           <td>£{productPrice}</td>
                           <td>
-                            <Button onClick={() => console.log('delete')}>
+                            <Button
+                              onClick={() =>
+                                dispatch(deleteProductStart(documentID))
+                              }
+                            >
                               Delete
                             </Button>
                           </td>
