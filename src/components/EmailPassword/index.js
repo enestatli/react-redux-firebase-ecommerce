@@ -7,35 +7,36 @@ import './styles.scss';
 import AuthWrapper from '../AuthWrapper';
 import FormInput from '../Forms/FormInput';
 import Button from '../Forms/Button';
-import { resetAllAuthForms, resetPassword } from '../../redux/User/actions';
+import { resetPasswordStart, resetUserState } from '../../redux/User/actions';
 
 const mapState = ({ user }) => ({
   resetPasswordSuccess: user.resetPasswordSuccess,
-  resetPasswordErrors: user.resetPasswordErrors,
+  userErrors: user.userErrors,
 });
 
 const EmailPassword = (props) => {
   const dispatch = useDispatch();
-  const { resetPasswordSuccess, resetPasswordErrors } = useSelector(mapState);
+  const { resetPasswordSuccess, userErrors } = useSelector(mapState);
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     if (resetPasswordSuccess) {
-      dispatch(resetAllAuthForms());
+      dispatch(resetUserState());
       props.history.push('/login');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetPasswordSuccess]);
 
   useEffect(() => {
-    if (Array.isArray(resetPasswordErrors) && resetPasswordErrors.length > 0) {
-      setErrors(resetPasswordErrors);
+    if (Array.isArray(userErrors) && userErrors.length > 0) {
+      setErrors(userErrors);
     }
-  }, [resetPasswordErrors]);
+  }, [userErrors]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(resetPassword({ email }));
+    dispatch(resetPasswordStart({ email }));
   };
 
   const configAuthWrapper = {
