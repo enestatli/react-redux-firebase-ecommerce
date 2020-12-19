@@ -1,11 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductsStart } from '../../redux/Products/actions';
+import Product from './Product';
 import './styles.scss';
-
-// const mapState = ({productsData}) => ({
-//   products: pr
-// })
 
 const ProductResults = ({}) => {
   const dispatch = useDispatch();
@@ -16,7 +13,7 @@ const ProductResults = ({}) => {
     console.log(products);
   }, []);
 
-  if (Array.isArray(products)) return null;
+  if (!Array.isArray(products)) return null;
 
   if (products.length < 1) {
     return (
@@ -28,23 +25,28 @@ const ProductResults = ({}) => {
 
   return (
     <div className="products">
-      {products.map((product, index) => {
-        const { productThumbnail, productName, productPrice } = product;
+      <h1>BROWSE PRODUCTS</h1>
 
-        if (
-          !productThumbnail ||
-          !productName ||
-          typeof productPrice === 'undefined'
-        )
-          return null;
+      <div className="productResults">
+        {products.map((product, index) => {
+          const { productThumbnail, productName, productPrice } = product;
 
-        return (
-          <div key={index}>
-            {productName}
-            {productPrice}
-          </div>
-        );
-      })}
+          if (
+            !productThumbnail ||
+            !productName ||
+            typeof productPrice === 'undefined'
+          )
+            return null;
+
+          const configProduct = {
+            productThumbnail,
+            productName,
+            productPrice,
+          };
+
+          return <Product {...configProduct} key={index} />;
+        })}
+      </div>
     </div>
   );
 };
