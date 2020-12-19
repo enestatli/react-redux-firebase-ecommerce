@@ -1,4 +1,4 @@
-import { takeLatest, call, all, put, take } from 'redux-saga/effects';
+import { takeLatest, call, all, put } from 'redux-saga/effects';
 import { auth } from '../../firebase/utils';
 import { fetchProductsStart, setProducts } from './actions';
 
