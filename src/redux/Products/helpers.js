@@ -15,11 +15,13 @@ export const handleAddProduct = (product) => {
   });
 };
 
-export const handleFetchProducts = () => {
+export const handleFetchProducts = ({ filterType }) => {
   return new Promise((resolve, reject) => {
-    firestore
-      .collection('products')
-      .orderBy('createdAt')
+    let ref = firestore.collection('products').orderBy('createdAt');
+
+    if (filterType) ref = ref.where('productCategory', '==', filterType);
+
+    ref
       .get()
       .then((snapshot) => {
         const productsArray = snapshot.docs.map((doc) => {
