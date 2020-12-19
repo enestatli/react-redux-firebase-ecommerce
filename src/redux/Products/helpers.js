@@ -19,6 +19,7 @@ export const handleFetchProducts = () => {
   return new Promise((resolve, reject) => {
     firestore
       .collection('products')
+      .orderBy('createdAt')
       .get()
       .then((snapshot) => {
         const productsArray = snapshot.docs.map((doc) => {
