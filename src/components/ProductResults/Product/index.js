@@ -1,13 +1,18 @@
+import Button from './../../Forms/Button';
+
 const Product = ({ productThumbnail, productName, productPrice }) => {
   if (!productThumbnail || !productName || typeof productPrice === 'undefined')
     return null;
+
+  const configAddToCartBtn = {
+    type: 'button',
+  };
 
   return (
     <div className="product">
       <div className="thumb">
         <img src={productThumbnail} alt={productName} />
       </div>
-
       <div className="details">
         <ul>
           <li>
@@ -15,8 +20,14 @@ const Product = ({ productThumbnail, productName, productPrice }) => {
           </li>
 
           <li>
-            <span className="name">{productPrice}</span>
+            <span className="name">${productPrice}</span>
           </li>
+
+          <div className="addToCart">
+            <li>
+              <Button {...configAddToCartBtn}>Add to cart</Button>
+            </li>
+          </div>
         </ul>
       </div>
     </div>
