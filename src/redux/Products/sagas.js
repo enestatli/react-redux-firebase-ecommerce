@@ -11,16 +11,11 @@ import {
 import productsTypes from './types';
 
 // add new product
-export function* addProduct({
-  payload: { productCategory, productName, productThumbnail, productPrice },
-}) {
+export function* addProduct({ payload }) {
   try {
     const timestamp = new Date();
     yield handleAddProduct({
-      productCategory,
-      productName,
-      productThumbnail,
-      productPrice,
+      ...payload,
       productAdminUserUID: auth.currentUser.uid,
       createdAt: timestamp,
     });

@@ -12,6 +12,7 @@ import {
   addProductStart,
   deleteProductStart,
   fetchProductsStart,
+  setProduct,
 } from '../../redux/Products/actions';
 
 const Admin = (props) => {
@@ -43,6 +44,7 @@ const Admin = (props) => {
     setProductName('');
     setProductThumbnail('');
     setProductPrice(0);
+    setProductDesc('');
   };
 
   const handleSubmit = (e) => {
@@ -53,6 +55,7 @@ const Admin = (props) => {
         productName,
         productThumbnail,
         productPrice,
+        productDesc,
       })
     );
     resetForm();
