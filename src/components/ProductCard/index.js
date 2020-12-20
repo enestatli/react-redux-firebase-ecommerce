@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchProductStart } from '../../redux/Products/actions';
+import { fetchProductStart, setProduct } from '../../redux/Products/actions';
 
 import Button from './../../components/Forms/Button';
 import './styles.scss';
@@ -15,6 +15,10 @@ const ProductCard = ({}) => {
 
   useEffect(() => {
     dispatch(fetchProductStart(productID));
+
+    return () => {
+      dispatch(setProduct({}));
+    };
   }, []);
 
   const configAddtoCartBtn = {
