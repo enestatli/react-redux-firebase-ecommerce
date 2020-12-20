@@ -8,9 +8,12 @@ import './styles.scss';
 
 const ProductCard = ({}) => {
   const dispatch = useDispatch();
-  const { productName, productThumbnail, productPrice } = useSelector(
-    (state) => state.productsData.product
-  );
+  const {
+    productName,
+    productThumbnail,
+    productPrice,
+    productDesc,
+  } = useSelector((state) => state.productsData.product);
   const { productID } = useParams();
 
   useEffect(() => {
@@ -45,6 +48,10 @@ const ProductCard = ({}) => {
             <div className="addToCart">
               <Button {...configAddtoCartBtn}>Add to cart</Button>
             </div>
+          </li>
+
+          <li>
+            <span dangerouslySetInnerHTML={{ __html: productDesc }}></span>
           </li>
         </ul>
       </div>
