@@ -6,16 +6,18 @@ import Product from './Product';
 import FormSelect from './../Forms/FormSelect';
 import './styles.scss';
 import { useHistory, useParams } from 'react-router-dom';
+import LoadMore from '../LoadMore';
 
 const ProductResults = ({}) => {
   const dispatch = useDispatch();
-  const products = useSelector(({ productsData }) => productsData.products);
+  const { data, queryDoc, isLastPage } = useSelector(
+    ({ productsData }) => productsData.products
+  );
   const history = useHistory();
   const { filterType } = useParams();
 
   useEffect(() => {
     dispatch(fetchProductsStart({ filterType }));
-    console.log(products);
   }, [filterType]);
 
   const handleFilter = (e) => {
@@ -23,9 +25,9 @@ const ProductResults = ({}) => {
     history.push(`/search/${nextFilter}`);
   };
 
-  if (!Array.isArray(products)) return null;
+  if (!Array.isArray(data)) return null;
 
-  if (products.length < 1) {
+  if (data.length < 1) {
     return (
       <div className="products">
         <p>No search results.</p>
@@ -43,13 +45,27 @@ const ProductResults = ({}) => {
     handleChange: handleFilter,
   };
 
+  const handleLoadMore = () => {
+    dispatch(
+      fetchProductsStart({
+        filterType,
+        startAfterDoc: queryDoc,
+        persistProducts: data,
+      })
+    );
+  };
+
+  const configLoadMore = {
+    onLoadMoreEvt: handleLoadMore,
+  };
+
   return (
     <div className="products">
       <h1>BROWSE PRODUCTS</h1>
       <FormSelect {...configFilters} />
 
       <div className="productResults">
-        {products.map((product, index) => {
+        {data.map((product, index) => {
           const { productThumbnail, productName, productPrice } = product;
 
           if (
@@ -68,6 +84,8 @@ const ProductResults = ({}) => {
           return <Product {...configProduct} key={index} />;
         })}
       </div>
+
+      {!isLastPage && <LoadMore {...configLoadMore} />}
     </div>
   );
 };
