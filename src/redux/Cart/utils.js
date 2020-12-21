@@ -26,3 +26,10 @@ export const handleAddToCart = ({ prevCartItems, nextCartItem }) => {
     },
   ];
 };
+
+export const handleRemoveCartItem = ({ prevCartItems, cartItemToRemove }) => {
+  console.log(prevCartItems);
+  return prevCartItems.filter(
+    (item) => item.documentID !== cartItemToRemove.documentID
+  );
+};

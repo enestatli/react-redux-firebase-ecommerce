@@ -1,4 +1,9 @@
+import { useDispatch } from 'react-redux';
+import { removeCartItem } from './../../../redux/Cart/actions';
+
 const Item = (product) => {
+  const dispatch = useDispatch();
+
   const {
     productName,
     productThumbnail,
@@ -6,6 +11,14 @@ const Item = (product) => {
     quantity,
     documentID,
   } = product;
+
+  const handleRemoveCartItem = (documentID) => {
+    dispatch(
+      removeCartItem({
+        documentID,
+      })
+    );
+  };
   return (
     <table className="cartItem" border="0" cellSpacing="0" cellPadding="10">
       <tbody>
@@ -21,7 +34,12 @@ const Item = (product) => {
           </td>
           <td>£{productPrice}</td>
           <td align="center">
-            <span className="cartBtn">X</span>
+            <span
+              className="cartBtn"
+              onClick={() => handleRemoveCartItem(documentID)}
+            >
+              X
+            </span>
           </td>
         </tr>
       </tbody>

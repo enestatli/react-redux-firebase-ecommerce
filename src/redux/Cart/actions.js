@@ -4,3 +4,8 @@ export const addProduct = (nextCardItem) => ({
   type: cartTypes.ADD_TO_CART,
   payload: nextCardItem,
 });
+
+export const removeCartItem = (cartItem) => ({
+  type: cartTypes.REMOVE_CART_ITEM,
+  payload: cartItem,
+});
