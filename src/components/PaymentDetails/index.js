@@ -1,3 +1,4 @@
+import { CountryDropdown } from 'react-country-region-selector';
 import './styles.scss';
 import FormInput from './../Forms/FormInput';
 import Button from './../Forms/Button';
@@ -19,6 +20,9 @@ const PaymentDetails = () => {
           <FormInput type="text" placeholder="City" />
           <FormInput type="text" placeholder="State" />
           <FormInput type="text" placeholder="Postal Code" />
+          <div className="formRow checkoutInput">
+            <CountryDropdown valueType="short" />
+          </div>
         </div>
         {/* billing */}
         <div className="group">
@@ -29,6 +33,9 @@ const PaymentDetails = () => {
           <FormInput type="text" placeholder="City" />
           <FormInput type="text" placeholder="State" />
           <FormInput type="text" placeholder="Postal Code" />
+          <div className="formRow checkoutInput">
+            <CountryDropdown valueType="short" />
+          </div>
         </div>
         {/* cart details */}
         <div className="group">
