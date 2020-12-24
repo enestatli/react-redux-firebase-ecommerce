@@ -3,12 +3,17 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
 import FormInput from './../Forms/FormInput';
 import Button from './../Forms/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './styles.scss';
 import { apiInstance } from '../../utils';
 import { createStructuredSelector } from 'reselect';
-import { useSelector } from 'react-redux';
-import { selectCartTotal } from './../../redux/Cart/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectCartTotal,
+  selectCartCartItemsCount,
+} from './../../redux/Cart/selectors';
+import { clearCart } from '../../redux/Cart/actions';
+import { useHistory } from 'react-router-dom';
 
 const initalAddressState = {
   line1: '',
@@ -21,12 +26,15 @@ const initalAddressState = {
 
 const mapState = createStructuredSelector({
   total: selectCartTotal,
+  itemCount: selectCartCartItemsCount,
 });
 
 const PaymentDetails = () => {
-  const { total } = useSelector(mapState);
+  const { total, itemCount } = useSelector(mapState);
+  const dispatch = useDispatch();
   const elements = useElements();
   const stripe = useStripe();
+  const history = useHistory();
   const [billingAddress, setBillingAddress] = useState({
     ...initalAddressState,
   });
@@ -35,6 +43,13 @@ const PaymentDetails = () => {
   });
   const [recipientName, setRecipientName] = useState('');
   const [nameOnCard, setNameOnCard] = useState('');
+
+  useEffect(() => {
+    if (itemCount < 1) {
+      history.push('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemCount]);
 
   const handleShipping = (evt) => {
     const { name, value } = evt.target;
@@ -101,7 +116,7 @@ const PaymentDetails = () => {
                 payment_method: paymentMethod.id,
               })
               .then(({ paymentIntent }) => {
-                console.log(paymentIntent);
+                dispatch(clearCart());
               });
           });
       });
