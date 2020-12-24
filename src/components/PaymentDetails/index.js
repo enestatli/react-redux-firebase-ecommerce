@@ -1,10 +1,14 @@
 import { CountryDropdown } from 'react-country-region-selector';
-import { CardElement } from '@stripe/react-stripe-js';
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
-import './styles.scss';
 import FormInput from './../Forms/FormInput';
 import Button from './../Forms/Button';
 import { useState } from 'react';
+import './styles.scss';
+import { apiInstance } from '../../utils';
+import { createStructuredSelector } from 'reselect';
+import { useSelector } from 'react-redux';
+import { selectCartTotal } from './../../redux/Cart/selectors';
 
 const initalAddressState = {
   line1: '',
@@ -15,7 +19,14 @@ const initalAddressState = {
   country: '',
 };
 
+const mapState = createStructuredSelector({
+  total: selectCartTotal,
+});
+
 const PaymentDetails = () => {
+  const { total } = useSelector(mapState);
+  const elements = useElements();
+  const stripe = useStripe();
   const [billingAddress, setBillingAddress] = useState({
     ...initalAddressState,
   });
@@ -43,6 +54,57 @@ const PaymentDetails = () => {
 
   const handleFormSubmit = async (evt) => {
     evt.preventDefault();
+    const cardElement = elements.getElement('card');
+
+    if (
+      !shippingAddress.line1 ||
+      !shippingAddress.city ||
+      !shippingAddress.state ||
+      !shippingAddress.postal_code ||
+      !shippingAddress.country ||
+      !billingAddress.line1 ||
+      !billingAddress.city ||
+      !billingAddress.state ||
+      !billingAddress.postal_code ||
+      !billingAddress.country ||
+      !recipientName ||
+      !nameOnCard
+    ) {
+      return;
+    }
+
+    apiInstance
+      .post('/payments/create', {
+        amount: total * 100,
+        shipping: {
+          name: recipientName,
+          address: {
+            ...shippingAddress,
+          },
+        },
+      })
+      .then(({ data: clientSecret }) => {
+        stripe
+          .createPaymentMethod({
+            type: 'card',
+            card: cardElement,
+            billing_details: {
+              name: nameOnCard,
+              address: {
+                ...billingAddress,
+              },
+            },
+          })
+          .then(({ paymentMethod }) => {
+            stripe
+              .confirmCardPayment(clientSecret, {
+                payment_method: paymentMethod.id,
+              })
+              .then(({ paymentIntent }) => {
+                console.log(paymentIntent);
+              });
+          });
+      });
   };
 
   const configCardElement = {
@@ -57,11 +119,12 @@ const PaymentDetails = () => {
 
   return (
     <div className="paymentDetails">
-      <form className={handleFormSubmit}>
+      <form onSubmit={handleFormSubmit}>
         {/* shipping */}
         <div className="group">
           <h2>Shipping Address</h2>
           <FormInput
+            required
             type="text"
             placeholder="Reciepient Name"
             name="recipientName"
@@ -69,6 +132,7 @@ const PaymentDetails = () => {
             handleChange={(e) => setRecipientName(e.target.value)}
           />
           <FormInput
+            required
             type="text"
             placeholder="Line 1"
             name="line1"
@@ -83,6 +147,7 @@ const PaymentDetails = () => {
             handleChange={(e) => handleShipping(e)}
           />
           <FormInput
+            required
             type="text"
             placeholder="City"
             name="city"
@@ -90,6 +155,7 @@ const PaymentDetails = () => {
             handleChange={(e) => handleShipping(e)}
           />
           <FormInput
+            required
             type="text"
             placeholder="State"
             name="state"
@@ -97,6 +163,7 @@ const PaymentDetails = () => {
             handleChange={(e) => handleShipping(e)}
           />
           <FormInput
+            required
             type="text"
             placeholder="Postal Code"
             name="postal_code"
@@ -105,6 +172,7 @@ const PaymentDetails = () => {
           />
           <div className="formRow checkoutInput">
             <CountryDropdown
+              required
               valueType="short"
               value={shippingAddress.country}
               onChange={(val) =>
@@ -117,6 +185,7 @@ const PaymentDetails = () => {
         <div className="group">
           <h2>Billing Address</h2>
           <FormInput
+            required
             type="text"
             placeholder="Name on Card"
             name="nameOnCard"
@@ -124,6 +193,7 @@ const PaymentDetails = () => {
             handleChange={(e) => setNameOnCard(e.target.value)}
           />
           <FormInput
+            required
             type="text"
             placeholder="Line 1"
             name="line1"
@@ -138,6 +208,7 @@ const PaymentDetails = () => {
             handleChange={(e) => handleBilling(e)}
           />
           <FormInput
+            required
             type="text"
             placeholder="City"
             name="city"
@@ -145,6 +216,7 @@ const PaymentDetails = () => {
             handleChange={(e) => handleBilling(e)}
           />
           <FormInput
+            required
             type="text"
             placeholder="State"
             name="state"
@@ -152,6 +224,7 @@ const PaymentDetails = () => {
             handleChange={(e) => handleBilling(e)}
           />
           <FormInput
+            required
             type="text"
             placeholder="Postal Code"
             name="postal_code"
@@ -160,6 +233,7 @@ const PaymentDetails = () => {
           />
           <div className="formRow checkoutInput">
             <CountryDropdown
+              required
               valueType="short"
               value={billingAddress.country}
               onChange={(val) =>
@@ -174,6 +248,8 @@ const PaymentDetails = () => {
 
           <CardElement options={configCardElement} />
         </div>
+
+        <Button type="submit">Pay Now</Button>
       </form>
     </div>
   );
