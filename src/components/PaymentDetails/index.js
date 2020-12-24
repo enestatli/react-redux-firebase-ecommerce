@@ -1,4 +1,6 @@
 import { CountryDropdown } from 'react-country-region-selector';
+import { CardElement } from '@stripe/react-stripe-js';
+
 import './styles.scss';
 import FormInput from './../Forms/FormInput';
 import Button from './../Forms/Button';
@@ -41,6 +43,16 @@ const PaymentDetails = () => {
 
   const handleFormSubmit = async (evt) => {
     evt.preventDefault();
+  };
+
+  const configCardElement = {
+    iconStyle: 'solid',
+    style: {
+      base: {
+        fontSize: '16px',
+      },
+    },
+    hidePostalCode: true,
   };
 
   return (
@@ -159,6 +171,8 @@ const PaymentDetails = () => {
         {/* cart details */}
         <div className="group">
           <h2>Cart Details</h2>
+
+          <CardElement options={configCardElement} />
         </div>
       </form>
     </div>
