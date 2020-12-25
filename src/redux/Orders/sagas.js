@@ -1,8 +1,7 @@
 import { takeLatest, call, all, put } from 'redux-saga/effects';
 import { auth } from '../../firebase/utils';
 import { clearCart } from '../Cart/actions';
-import { handleGetUserOrderHistory } from '../User/helpers';
-import { handleSaveOrder } from './helpers';
+import { handleGetUserOrderHistory, handleSaveOrder } from './helpers';
 import { setUserOrderHistory } from './actions';
 
 import ordersTypes from './types';
@@ -11,8 +10,8 @@ export function* getUserOrderHistory({ payload }) {
   try {
     const history = yield handleGetUserOrderHistory(payload);
     yield put(setUserOrderHistory(history));
-  } catch (error) {
-    // console.log(error)
+  } catch (err) {
+    console.log(err);
   }
 }
 
