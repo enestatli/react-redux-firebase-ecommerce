@@ -1,7 +1,29 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import { getOrderDetailsStart } from './../../redux/Orders/actions';
+
+const mapState = ({ ordersData }) => ({
+  orderDetails: ordersData.orderDetails,
+});
+
 const Order = () => {
+  const { orderID } = useParams();
+  const dispatch = useDispatch();
+  const { orderDetails } = useSelector(mapState);
+
+  const { orderTotal } = orderDetails;
+
+  useEffect(() => {
+    dispatch(getOrderDetailsStart(orderID));
+  }, []);
+
   return (
     <div>
-      <h2>ORDER ID: JFLQKWFHKQJWHFKJQHF</h2>
+      <h1>ORDER ID: {orderID}</h1>
+
+      <h3>Total:{orderTotal}</h3>
     </div>
   );
 };
