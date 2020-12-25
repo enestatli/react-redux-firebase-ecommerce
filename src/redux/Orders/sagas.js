@@ -1,8 +1,12 @@
 import { takeLatest, call, all, put } from 'redux-saga/effects';
 import { auth } from '../../firebase/utils';
 import { clearCart } from '../Cart/actions';
-import { handleGetUserOrderHistory, handleSaveOrder } from './helpers';
-import { setUserOrderHistory } from './actions';
+import {
+  handleGetOrder,
+  handleGetUserOrderHistory,
+  handleSaveOrder,
+} from './helpers';
+import { setOrderDetails, setUserOrderHistory } from './actions';
 
 import ordersTypes from './types';
 
@@ -20,6 +24,19 @@ export function* onGetUserOrderHistoryStart() {
     ordersTypes.GET_USER_ORDER_HISTORY_START,
     getUserOrderHistory
   );
+}
+
+export function* getOrderDetails({ payload }) {
+  try {
+    const order = yield handleGetOrder(payload);
+    yield put(setOrderDetails(order));
+  } catch (error) {
+    // console.log(error);
+  }
+}
+
+export function* onGetOrderDetailsStart() {
+  yield takeLatest(ordersTypes.GET_ORDER_DETAILS_START, getOrderDetails);
 }
 
 export function* saveOrder({ payload }) {
@@ -41,5 +58,9 @@ export function* onSaveOrderHistoryStart() {
 }
 
 export default function* ordersSagas() {
-  yield all([call(onSaveOrderHistoryStart), call(onGetUserOrderHistoryStart)]);
+  yield all([
+    call(onSaveOrderHistoryStart),
+    call(onGetUserOrderHistoryStart),
+    call(onGetOrderDetailsStart),
+  ]);
 }

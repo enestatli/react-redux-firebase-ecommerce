@@ -38,3 +38,23 @@ export const handleGetUserOrderHistory = (uid) => {
       });
   });
 };
+
+export const handleGetOrder = (orderID) => {
+  return new Promise((resolve, reject) => {
+    firestore
+      .collection('orders')
+      .doc(orderID)
+      .get()
+      .then((snap) => {
+        if (snap.exists) {
+          resolve({
+            ...snap.data(),
+            documentID: orderID,
+          });
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};

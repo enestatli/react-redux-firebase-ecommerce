@@ -34,7 +34,7 @@ const formatText = (columnName, columnValue) => {
     case 'orderTotal':
       return `$${columnValue}`;
     case 'orderCreatedDate':
-      return moment(columnValue).format('DD/MM/YYYY');
+      return moment(columnValue.nano).format('DD/MM/YYYY');
 
     default:
       return columnValue;
@@ -50,7 +50,7 @@ const OrderHistory = ({ orders }) => {
             {columns.map((column, pos) => {
               const { label } = column;
               return (
-                <TableCell key={pos} styles={styles}>
+                <TableCell key={pos} style={styles}>
                   {label}
                 </TableCell>
               );
@@ -68,7 +68,7 @@ const OrderHistory = ({ orders }) => {
                     const columnValue = row[columnName];
                     const formatedText = formatText(columnName, columnValue);
                     return (
-                      <TableCell key={pos} styles={styles}>
+                      <TableCell key={pos} style={styles}>
                         {formatedText}
                       </TableCell>
                     );
