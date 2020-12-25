@@ -11,9 +11,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   selectCartTotal,
   selectCartCartItemsCount,
+  selectCartItems,
 } from './../../redux/Cart/selectors';
 import { clearCart } from '../../redux/Cart/actions';
 import { useHistory } from 'react-router-dom';
+import { saveOrderHistory } from '../../redux/Orders/actions';
 
 const initalAddressState = {
   line1: '',
@@ -27,10 +29,11 @@ const initalAddressState = {
 const mapState = createStructuredSelector({
   total: selectCartTotal,
   itemCount: selectCartCartItemsCount,
+  cartItems: selectCartItems,
 });
 
 const PaymentDetails = () => {
-  const { total, itemCount } = useSelector(mapState);
+  const { total, itemCount, cartItems } = useSelector(mapState);
   const dispatch = useDispatch();
   const elements = useElements();
   const stripe = useStripe();
@@ -46,7 +49,7 @@ const PaymentDetails = () => {
 
   useEffect(() => {
     if (itemCount < 1) {
-      history.push('/');
+      history.push('/dashboard');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemCount]);
@@ -116,7 +119,28 @@ const PaymentDetails = () => {
                 payment_method: paymentMethod.id,
               })
               .then(({ paymentIntent }) => {
-                dispatch(clearCart());
+                const configOrder = {
+                  orderTotal: total,
+                  orderItems: cartItems.map((item) => {
+                    const {
+                      documentID,
+                      productThumbnail,
+                      productName,
+                      productPrice,
+                      quantity,
+                    } = item;
+
+                    return {
+                      documentID,
+                      productThumbnail,
+                      productName,
+                      productPrice,
+                      quantity,
+                    };
+                  }),
+                };
+
+                dispatch(saveOrderHistory(configOrder));
               });
           });
       });
