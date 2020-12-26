@@ -132,14 +132,14 @@ const App = (props) => {
         />
         <Route
           path="/order/:orderID"
-          render={() => {
+          render={() => (
             <WithAuth>
               <DashBoardLayout>
                 <Order />
               </DashBoardLayout>
-            </WithAuth>;
-          }}
-        ></Route>
+            </WithAuth>
+          )}
+        />
         <WithAdminAuth>
           <Route
             path="/admin"
