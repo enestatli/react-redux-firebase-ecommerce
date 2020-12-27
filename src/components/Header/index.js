@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import './styles.scss';
 import { signOutUserStart } from '../../redux/User/actions';
 import { selectCartCartItemsCount } from '../../redux/Cart/selectors';
+import Logo from './../../assets/logo.png';
 
 const mapState = (state) => ({
   currentUser: state.user.currentUser,
@@ -23,10 +24,7 @@ const Header = () => {
       <div className="wrap">
         <div className="logo">
           <Link to="/">
-            <img
-              src="https://raw.githubusercontent.com/simpletut/React-Redux-Firebase-eCommerce-Website/master/src/assets/logo.png"
-              alt="logo"
-            />
+            <img src={Logo} alt="logo" />
           </Link>
         </div>
 

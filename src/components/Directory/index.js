@@ -1,6 +1,6 @@
 import './styles.scss';
-import ShopMen from '../../assets/shopMens.jpg';
-import ShopWomen from '../../assets/shopWomens.jpg';
+import ShopMen from '../../assets/shopsMen.jpg';
+import ShopWomen from '../../assets/shopsWomen.jpg';
 
 const Directory = (props) => {
   return (
